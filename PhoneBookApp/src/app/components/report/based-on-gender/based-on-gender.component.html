@@ -1,0 +1,36 @@
+<div class="container"><h2 class="text-center">Contacts count based on Gender</h2></div>
+
+<div *ngIf="totalMale > 0 else noMaleData" class="mb-3" style="margin-left: 20px;">
+  <div class="card col-md-6">
+    <div class="card-body">
+      <h5 class="card-title">Total Male</h5>
+      <p class="card-text">{{ totalMale }}</p>
+    </div>
+  </div>
+</div>
+<ng-template #noMaleData>
+  <small class="text-danger">No contacts found</small>
+</ng-template>
+
+<div *ngIf="totalFemale > 0 else noFemaleData" style="margin-left: 20px;">
+  <div class="card col-md-6">
+    <div class="card-body">
+      <h5 class="card-title">Total Female</h5>
+      <p class="card-text">{{ totalFemale }}</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #noFemaleData class="mb-4"> <!-- Added mb-4 for bottom margin -->
+  <small class="text-danger">
+    No contacts found
+  </small>
+</ng-template>
+
+<div class="container mt-4"> <!-- Added mt-4 for top margin -->
+  <button class="btn btn-secondary btn-block" [routerLink]="['/pagination']" routerLinkActive="router-link-active">
+    <i class="fas fa-arrow-left"></i> Back to List
+  </button>
+</div>
+      
+  

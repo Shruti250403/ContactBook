@@ -1,0 +1,263 @@
+<!-- <div class="contact-container">
+    <div class="btn-row">
+        <button type="submit" name="letter" value="@letter" class="btn btn-primary">Filter by Letter</button>
+        <button type="submit" name="All" value="contact" class="btn btn-secondary">Show All Contacts</button>
+        <button class="btn btn-success">Add Contact</button>
+    </div>
+
+    <div *ngIf="loading" class="loading-container">
+        <img src="assets/loaderImage.gif" alt="Loading..." class="loading-image">
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Contact Number</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!loading && (!contacts || contacts.length === 0)">
+                <td colspan="5">No contacts found</td>
+            </tr>
+            <tr *ngFor="let contact of contacts">
+                <td>
+
+                    <img src="assets/girl.jpg" alt="Contact Image" width="50" height="50" />
+                
+                
+                </td>
+                <td>{{contact.firstName}}</td>
+                <td>{{contact.lastName}}</td>
+                <td>{{contact.phone}}</td>
+                <td>
+                    <a class="btn btn-info m-1" [routerLink]="['/editcontact', contact.contactId]" routerLinkActive="router-link-active"   >Edit</a>
+                    <a class="btn btn-info m-1" [routerLink]="['/detailcontact', contact.contactId]" routerLinkActive="router-link-active"   >Details</a>
+                    <button class="btn btn-outline-danger m-1" (click)="deleteContact(contact.contactId)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a [routerLink]="['/addcontact']" routerLinkActive="router-link-active">Add</a> 
+</div>
+<style>
+    .contact-container {
+    padding: 20px;
+}
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.loading-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.loading-image {
+    width: 50px;
+    height: 50px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn {
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+</style>
+
+
+ -->
+ <h1>Contacts</h1>
+ <div class="contact-container">
+
+    <div *ngIf="loading" class="loading-container">
+        <img src="assets/loaderImage.gif" alt="Loading..." class="loading-image">
+    </div>
+
+    <table class="table" *ngIf="!loading">  <thead>
+        <tr>
+          <th>Profile Photo</th>
+          <th>Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!loading && !contacts">
+          <td colspan="3">No contacts found</td>
+              </tr>
+        <tr *ngFor="let contact of contacts">
+          <td *ngIf="contact.image!='girl.jpg'">
+            <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+            [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+          </td>
+          <td *ngIf="contact.image=='girl.jpg'">
+            <img
+              src="assets/girl.jpg"
+              alt="image"
+              width="50"
+              height="50"
+              style="border-radius: 50%"
+            />
+          </td>
+          <td>{{contact.firstName}} {{contact.lastName}}</td>
+    
+          <td>
+            <a class="btn btn-outline-warning m-1" [routerLink]="['/detailcontact', contact.contactId]" routerLinkActive="router-link-active"   >Details</a>
+            <a *ngIf="isAuthenticated" class="btn btn-outline-info m-1" [routerLink]="['/editContact', contact.contactId]" routerLinkActive="router-link-active"   >Edit</a>
+        <button *ngIf="isAuthenticated" class="btn btn-outline-danger m-1" (click)="deleteContact(contact.contactId)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <a [routerLink]="['/addcontact']" routerLinkActive="router-link-active" class="btn btn-primary">Add Contact</a>
+    <a class="btn btn-outline-info" [routerLink]="['/favourite']" routerLinkActive="router-link-active">View favourites</a>
+
+</div>
+
+<style>
+    .contact-container {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .loading-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .loading-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .no-contacts {
+        text-align: center;
+        font-style: italic;
+        color: #777;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: #fff;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+</style>
+
+

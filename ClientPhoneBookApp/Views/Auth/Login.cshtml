@@ -1,0 +1,46 @@
+﻿@using ClientPhoneBookApp.ViewModels
+
+@model LoginViewModel
+
+<div class="card mx-auto mt-5" style="max-width: 400px;">
+    <div class="card-header">
+        <h2 class="text-center">Login</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-center mt-3">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+            <div class="text-center">
+                <a asp-action="ForgotPassword" class="link-primary">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        border-bottom: none;
+    }
+
+        .card-header h2 {
+            margin: 0;
+        }
+</style>

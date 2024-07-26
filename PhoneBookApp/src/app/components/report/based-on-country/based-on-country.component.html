@@ -1,0 +1,43 @@
+<div class="container"><h2 class="text-center">Contacts count based on Country</h2></div>
+
+<form [formGroup]="contactForm">
+
+  <div class="col-md-6" style="margin-left: 20px;">
+    <label for="countryId" class="form-label">Country:</label>
+    <select class="form-control" id="countryId" formControlName="countryId">
+        <option value="">---Select---</option>
+        <option *ngFor="let country of country" [value]="country.countryId">
+            {{ country.countryName }}
+        </option>
+    </select>
+    <div *ngIf="formControl['countryId'].invalid && formControl['countryId'].touched">
+        <small class="text-danger">
+            Country is required
+        </small>
+    </div>
+</div>
+
+</form>
+
+
+<div *ngIf="totalContacts>0  else noData">
+    <div class="card col-md-6">
+      <div class="card-body">
+        <h5 class="card-title">Total Contacts</h5>
+        <p class="card-text">{{ totalContacts }}</p>
+      </div>
+    </div>
+  </div>
+  <ng-template #noData >  <small class="text-danger" style="margin-left: 20px;">
+    No contacts found</small></ng-template>
+    <div class="container  d-flex justify-content-left" style="margin-left: 20px;">
+      <div class="row" >
+        <div class="col">
+          <button class="btn btn-secondary" [routerLink]="['/pagination']" routerLinkActive="router-link-active">
+            <i class="fas fa-arrow-left"></i> Back to List
+          </button>
+        </div>
+      </div>
+    </div>
+    
+  

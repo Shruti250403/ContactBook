@@ -1,0 +1,61 @@
+﻿@using ClientPhoneBookApp.ViewModels
+
+@model ContactViewModel
+
+<h1>Contact Details</h1>
+<div class="card">
+    <div class="image-container">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Url.Content("~/uploads/" + Model.Image)" alt="Contact Image" width="80" height="80" />
+        }
+        else
+        {
+            <img src="@Url.Content("~/uploads/defaultimage.png")" alt="Profile Picture" width="80" height="80" />
+        }
+    </div>
+    <div class="card-body">
+        <p><strong>Name:</strong> @Model.FirstName @Model.LastName</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+        <p><strong>Company:</strong> @Model.Company</p>
+        <p><strong>Gender:</strong> @(Model.Gender == "M" ? "Male" : "Female")</p>
+        <p><strong>Favourite:</strong> @(Model.Favourites ? "Yes" : "No")</p>
+        <p><strong>Country:</strong> @Model.Country.CountryName</p>
+        <p><strong>State:</strong> @Model.State.StateName</p>
+        <p><strong>BirthDate:</strong>@Model.BirthDate</p>
+    </div>
+</div>
+
+<div style="text-align: center;">
+    <a class="btn btn-primary mt-3" asp-action="ShowAllContactWithPagination">Back to HomePage</a>
+</div>
+<style>
+    .card {
+        margin: 15px auto;
+        padding: 15px;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .card-body p {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .image-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-container img {
+        border-radius: 50%;
+    }
+
+    .btn {
+        display: inline-block;
+        margin: 10px auto;
+        text-align: center;
+    }
+</style>

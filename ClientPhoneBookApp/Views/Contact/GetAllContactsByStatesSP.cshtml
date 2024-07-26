@@ -1,0 +1,105 @@
+﻿@using ClientPhoneBookApp.ViewModels
+@model List<ContactSPViewModel>
+
+@{
+    int count = 1;
+    int state = ViewBag.State;
+
+
+    var countries = ViewBag.Countries as List<CountryViewModel>;
+    var states = ViewBag.States as List<StateViewModel>;
+}
+<div class="container" style="background-color: white;">
+
+    <partial name="_ReportPartialView" />
+
+    <div class="table-responsive mt-3">
+        <table class="table table-striped books-table" style="font-size: smaller; text-align: center; border-color: black; border-top: black;">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th></th>
+                    <th> Name</th>
+                    <th>Phone Number</th>
+                    
+                    <th>Birth Date</th>
+                    <th>Gender</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7">No record found.</td>
+                    </tr>
+                }
+                else
+                {
+
+                    @foreach (var contact in Model)
+                    {
+
+                        <tr>
+
+                            <td>
+                                @if (contact.Image != string.Empty)
+                                {
+                                    <img src="@Url.Content("~/uploads/" + contact.Image)" class="img-fluid rounded-circle" alt="Contact Image" width="50" height="50" />
+
+
+                                }
+                                else
+                                {
+                                    <div class="col-sm-10">
+                                        <img src="@Url.Content("~/uploads/defaultimage.png")" class="img-fluid rounded-circle" alt="Profile Picture" width="50" height="50" />
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                @if (contact.Favourites)
+                                {
+
+
+                                    <span class="mr-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                        </svg>
+                                    </span>
+                                }
+                            </td>
+                            <td>@contact.FirstName</td>
+                            <td>@contact.Phone</td>
+
+
+                    @if(contact.birthDate != null)
+                    {
+                                <td>@contact.birthDate.Value.ToShortDateString()</td>
+                            }
+                            else
+                            {
+                                <td>Not available</td>
+                            }
+                            @if (@contact.Gender == "M")
+                            {
+
+                                <td>Male</td>
+                            }
+                            else
+                            {
+                                <td>Female</td>
+
+                            }
+                            
+
+                        </tr>
+
+                        count++;
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+

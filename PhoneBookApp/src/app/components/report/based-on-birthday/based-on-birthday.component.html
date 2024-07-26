@@ -1,0 +1,149 @@
+<!-- <div class="container">
+    <h2 class="custom-heading  text-center my-4">Get Contacts of  {{ monthNames[selectedMonth - 1] }}
+   </h2>
+   <div class="form-group rounded-corner mb-4" >
+     <label for="monthDropdown"><b>Select Month:</b></label>
+     <select id="monthDropdown" class="form-control" [(ngModel)]="selectedMonth" (change)="onMonthSelected()">
+       <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+     </select>
+     <div *ngIf="!selectedMonth" class="text-danger">
+       Please select a month.
+     </div>
+   </div>
+ 
+ 
+ 
+   <div *ngIf="contacts &&  selectedMonth else noData" class="mb-4" >
+    <table class="table table-borderd">
+        <thead>
+            <tr>
+                <th>Profile Photo</th>
+                <th>Is Favourite?</th>
+                <th>Name</th>                  
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Birthdate</th>
+                
+ 
+            </tr>
+        </thead>
+        <tbody *ngIf="contacts && contacts.length > 0 ; else noContacts">
+            <tr *ngFor="let contact of contacts">
+                <td *ngIf="contact.image!=null">
+                    <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+                        [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+                    <img *ngIf="!contact.image" src="assets/girl.jpg" alt="Profile" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td *ngIf="contact.image==null">
+                    <img src="assets/girl.png" alt="image" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td>
+                   
+                    <i *ngIf="contact.favourites" class="fa fa-star text-warning"></i>
+                    <i *ngIf="!contact.favourites" class="fa fa-star" style="color: white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;"></i>
+            </td>
+                <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+               
+               
+                <td>{{contact.phone}}</td>
+                <td>{{contact.gender == 'F' ? 'Female' :
+                    'Male'}}</td>
+                <td>{{contact.birthDate| date:'yyy-MM-dd'}}</td>
+                
+                <td>{{contact.stateName}} {{contact.countryName}}</td>
+               
+            </tr>
+        </tbody>
+        <ng-template #noContacts>
+            <tr>
+                <td colspan="3">No contacts found</td>
+            </tr>
+        </ng-template>
+    </table>
+</div>
+    <ng-template #noData>
+     <div class="rounded-corner no-data text-danger">
+       <p>No data available for the this month</p>
+     </div>
+   </ng-template>
+ 
+   </div>
+   <div class="container">
+    <button class="btn btn-secondary btn-block" [routerLink]="['/pagination']"
+    routerLinkActive="router-link-active">
+    <i class="fas fa-arrow-left"></i> Back to List
+  </button>
+  </div> -->
+
+  <div class="container">
+    <!-- Heading -->
+    <h2 class="custom-heading text-center my-4">Get Contacts for {{ monthNames[selectedMonth - 1] }}</h2>
+  
+    <!-- Month Dropdown -->
+    <div class="form-group rounded-corner mb-4 custom-heading text-left">
+      <label for="monthDropdown" class="custom-heading text-left"><b>Select Month:</b></label>
+      <select id="monthDropdown" class="form-control" [(ngModel)]="selectedMonth" (change)="onMonthSelected()">
+        <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+      </select>
+      <div *ngIf="!selectedMonth" class="text-danger mt-2">
+        Please select a month.
+      </div>
+    </div>
+  
+    <!-- Contact List Table -->
+    <div *ngIf="contacts && selectedMonth; else noData" class="custom-heading text-center mb-4">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Profile Photo</th>
+            <th></th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th>Birthdate</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="contacts.length > 0; else noContacts">
+          <tr *ngFor="let contact of contacts">
+            <td>
+              <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte"
+                alt="Contact Image" [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+              <img *ngIf="!contact.imageByte" src="assets/girl.jpg" alt="Profile" width="50" height="50"
+                style="border-radius: 50%">
+            </td>
+            <td>
+              <i *ngIf="contact.favourites" class="fa fa-star text-warning"></i>
+              <i *ngIf="!contact.favourites" class="fa fa-star"
+                style="color: white; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;"></i>
+            </td>
+            <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+            <td>{{ contact.phone }}</td>
+            <td>{{ contact.gender == 'F' ? 'Female' : 'Male' }}</td>
+            <td>{{ contact.birthDate | date:'yyyy-MM-dd' }}</td>
+            <!-- <td>{{ contact.stateName }} {{ contact.countryName }}</td> -->
+          </tr>
+        </tbody>
+        <ng-template #noContacts>
+          <tr>
+            <td colspan="6" class="text-center">No contacts found</td>
+          </tr>
+        </ng-template>
+      </table>
+    </div>
+  
+    <!-- No Data Template -->
+    <ng-template #noData>
+      <div class="rounded-corner no-data text-danger text-center mt-4">
+        <p>No data available for this month</p>
+      </div>
+    </ng-template>
+  
+    <!-- Back Button -->
+    <div class="container mt-4">
+      <button class="btn btn-secondary btn-block" [routerLink]="['/pagination']" routerLinkActive="router-link-active">
+        <i class="fas fa-arrow-left"></i> Back to List
+      </button>
+    </div>
+  </div>
+  
+  

@@ -1,0 +1,145 @@
+<h1 class="mb-4">
+  <span style="color: blue;">C</span>
+  <span style="color: green;">o</span>
+  <span style="color: red;">n</span>
+  <span style="color: orange;">t</span>
+  <span style="color: purple;">a</span>
+  <span style="color: teal;">c</span>
+  <span style="color: pink;">t</span>
+  <span style="color: brown;">s</span>
+</h1>
+<div class="justify-content-between align-items-center mb-3" style="margin-bottom: 20px;">
+  <div class="table-responsive" style="margin-bottom: 20px;">
+    <input type="text" [(ngModel)]="searchQuery" (input)="searchContacts()" class="form-control long-search-bar" placeholder="Search contacts...">
+    <button type="button" class="btn btn-outline-secondary" (click)="clearSearch()">Clear</button>
+    <!-- <div class="col-md-3 ml-0">
+      
+    </div> -->
+  <div>
+  <div class="btn-group">
+    
+    <ng-container *ngIf="contacts && contacts.length > 0">
+      <button class="btn btn-outline-primary mr-2" *ngFor="let letter of uniqueFirstLetters; let i = index" (click)="onLetterClick(letter)" [style.color]="colors[i]" [class.active]="selectedLetter === letter">{{ letter }}</button>
+    </ng-container>
+    <button class="btn btn-outline-primary" style="color: red;" (click)="onShowAll()">Show All</button>
+  </div>
+</div>
+<!-- <div class="favourites-link">
+  <a [routerLink]="['/favourite']" routerLinkActive="router-link-active">
+    <i class="fas fa-star" style="color: black;"></i> 
+    <span style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">Favourites</span>
+  </a>
+</div> -->
+<div style="margin-bottom: 20px;"></div>
+<div class="">
+  <a [routerLink]="['/favourite']" routerLinkActive="router-link-active" class="btn btn-light">
+    <i class="fas fa-star"></i> 
+    <span class="favourites-link-text">Favourites</span>
+  </a>
+</div>
+
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Profile Photo</th>
+        <th>
+          <div class="fas fa-caret-up arrowup" (click)="sortAsc()"></div>
+          <div class="fas fa-caret-down arrowdown" (click)="sortDesc()"></div>
+          Name
+      </th>
+      <th></th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="contacts && contacts.length > 0 && totalContacts != 0; else noContacts">
+      <tr *ngFor="let contact of contacts">
+        <td *ngIf="contact.image!='girl.jpg'">
+          <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+            [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+        </td>
+        <td *ngIf="contact.image=='girl.jpg'">
+          <img src="assets/girl.jpg" alt="image" width="50" height="50" style="border-radius: 50%">
+        </td>
+        <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+        <td> <span *ngIf="contact.favourites"class="fas fa-star" style="color: red;"></span></td>
+        <td>
+          <div class="btn-group">
+            <a class="btn btn-outline-warning" [routerLink]="['/detailcontact', contact.contactId]" routerLinkActive="router-link-active" title="Details">
+              <i class="fas fa-info-circle"></i>
+            </a>
+
+            <a *ngIf="isAuthenticated" class="btn btn-outline-info" [routerLink]="['/editcontact', contact.contactId]" routerLinkActive="router-link-active" title="Edit">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a *ngIf="isAuthenticated" class="btn btn-outline-info" [routerLink]="['/edittf', contact.contactId]" routerLinkActive="router-link-active" title="Edit-TF">
+              <i class="fas fa-edit">TF</i>
+            </a>
+
+            <button *ngIf="isAuthenticated" class="btn btn-outline-danger" (click)="deleteContact(contact.contactId)" title="Delete">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <ng-template #noContacts>
+      <tr colspan="5">
+          <td>No contacts Found!</td>
+      </tr>
+  </ng-template>
+  </table>
+</div>
+<div class="mb-3">
+  <a *ngIf="isAuthenticated" class="btn btn-outline-success" [routerLink]="['/addcontact']" routerLinkActive="router-link-active" title="Add Contact">
+    <i class="fas fa-plus"></i>
+  </a>
+  <a *ngIf="isAuthenticated" class="btn btn-outline-success" [routerLink]="['/addtf']" routerLinkActive="router-link-active" title="Add Contact-TF">
+    <i class="fas fa-plus">TF</i>
+  </a>
+</div>
+
+<div *ngIf="totalContacts != 0" class="pagination-container">
+  <!-- Previous and Next Buttons -->
+  <div class="pagination-navigation">
+    <button class="btn btn-outline-primary" (click)="onPageChange(1, selectedLetter)" [disabled]="currentPage === 1">
+      <i class="fa-solid fa-angles-left"></i>
+  </button>
+      <button class="btn btn-outline-primary" (click)="onPageChange(currentPage - 1, selectedLetter)" [disabled]="currentPage === 1">
+          <i class="fas fa-chevron-left"></i> <!-- Font Awesome icon for "chevron left" -->
+      </button>
+      <div class="btn-group" role="group" aria-label="Pagination buttons">
+          <button class="btn btn-outline-primary" *ngFor="let pageNumber of totalPages" (click)="onPageChange(pageNumber, selectedLetter)" [disabled]="currentPage === pageNumber" [ngClass]="{ 'active-page': currentPage === pageNumber }">
+              {{ pageNumber }}
+          </button>
+      </div>
+      <button class="btn btn-outline-primary" (click)="onPageChange(currentPage + 1, selectedLetter)" [disabled]="currentPage * pageSize >= totalContacts">
+          <i class="fas fa-chevron-right"></i> <!-- Font Awesome icon for "chevron right" -->
+      </button>
+      <button class="btn btn-outline-primary" (click)="onPageChange(totalPages[totalPages.length - 1], selectedLetter)" [disabled]="currentPage === totalPages[totalPages.length - 1]">
+        <i class="fa-solid fa-angles-right"></i>
+
+    </button>
+  </div>
+
+  <div style="margin-bottom: 20px;"></div>
+<!-- Page Size Selection -->
+<div class="page-size-selection ml-auto">
+  <span>Page Size:</span>
+  <select [(ngModel)]="pageSize" (change)="onPageSizeChange(selectedLetter)" class="custom-select">
+      <option value="2">2</option>
+      <option value="4">4</option>
+      <option value="6">6</option>
+  </select>
+</div>
+<!-- <div>
+  <button class="btn btn-outline-info" (click)="onPageChange(currentPage - 1, selectedLetter)" [disabled]="currentPage === 1">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button class="btn btn-outline-info" (click)="onPageChange(currentPage + 1, selectedLetter)" [disabled]="currentPage * pageSize >= totalContacts">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</div> -->

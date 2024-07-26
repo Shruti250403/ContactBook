@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Sign In</h2>
+                    <form (ngSubmit)="login()" #loginForm="ngForm">
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">Username</label>
+                            <input type="text" id="Username" name="Username" class="form-control" [(ngModel)]="Username" required #UsernameInput="ngModel">
+                            <div *ngIf="UsernameInput.touched && UsernameInput.errors?.['required']" class="form-text text-danger">
+                                Username is required.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required #passwordInput="ngModel">
+                            <div *ngIf="passwordInput.touched && passwordInput.errors?.['required']" class="form-text text-danger">
+                                Password is required.
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.valid">Login</button>
+                            <a [routerLink]="['/forgotPassword']" routerLinkActive="router-link-active" >Forgot Password</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

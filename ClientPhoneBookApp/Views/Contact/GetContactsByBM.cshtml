@@ -1,0 +1,112 @@
+﻿@using APIPhoneBook.Models
+@using System.Globalization
+
+@model ContactModel
+
+@{
+    ViewData["Title"] = "Get Contacts By Birth Month";
+}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="card mb-3" id="proftax">
+            <div class="card-body btn-light">
+                <h1 class="card-title text-center">Get Contacts By Birth Month</h1>
+
+
+                @using (Html.BeginForm("GetContactsByBM", "Report", FormMethod.Post, new { id = "monthlyReportForm" }))
+                {
+
+                    <div class="form-group" id="monthDropdown" style="display: none;">
+                        @Html.Label("Select Month:")
+                        @{
+                            var monthList = Enumerable.Range(1, 12)
+                            .Select(x => new SelectListItem
+                {
+                    Text = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x),
+                    Value = x.ToString()
+                });
+                            var selectListMonth = new SelectList(monthList, "Value", "Text", null);
+                        }
+                        @Html.DropDownList("Months", new SelectList(ViewBag.Months), "Select Month", new { @class = "form-control", onchange = "submitForm()" })
+                        @* @Html.DropDownList("month", ViewBag.Months, "Select Month", new { @class = "form-control", onchange = "submitForm()" }) *@
+
+                    </div>
+
+
+                }
+                <div id="monthErrorMessage" style="color: red;">*Please select a month.</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 text-start">
+                <a class="btn btn-secondary btn-block " asp-action="MonthlySalaryReport" asp-controller="Report">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>FirstName</th>
+                        <th>Phone</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+                        <td>@Model.Image</td>
+                        <td>@Model.FirstName</td>
+                        <td>@Model.LastName</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+
+        function submitForm() {
+            var selectedMonth = $('#month').val();
+            if (selectedMonth !== '') {
+                $('#monthErrorMessage').hide();
+                $('#monthlyReportForm').submit();
+            } else {
+                $('#monthErrorMessage').show();
+            }
+        };
+
+        function monthForError() {
+            var selectedMonth = $('#month').val();
+            if (selectedMonth !== '') {
+                $('#monthErrorMessage').hide();
+            } else {
+                $('#monthErrorMessage').show();
+            }
+        }
+
+        $(document).ready(function () {
+            // Function to show month dropdown if year is selected
+            monthForError();
+        });
+    </script>
+}
+

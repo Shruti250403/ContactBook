@@ -1,0 +1,184 @@
+﻿@using ClientPhoneBookApp.ViewModels
+
+
+@model List<ContactViewModel>
+@{
+    int count = 1;
+    var distinctLetters = ViewBag.DistinctLetters;
+}
+<h2>Favourites</h2>
+<!DOCTYPE html>
+<html>
+    
+<body>
+
+    <form method="get" id="myForm">
+        <div>
+            <div class="btn-row">
+
+                <div class="button-group">
+                    @if (distinctLetters != null && distinctLetters.Count > 0)
+                    {
+                        <form method="get">
+                            <div class="btn-group mb-3" role="group">
+                                @foreach (var letter in distinctLetters)
+                    {
+                        string buttonClass = "";
+                        if (ViewBag.Letter != null && ViewBag.Letter.ToString() == letter.ToString())
+                        {
+                            buttonClass = "active";
+                        }
+                        <button class="btn btn-outline-primary @buttonClass" type="submit" name="letter" value="@letter">@letter</button>
+                    }
+                    <button class="btn btn-outline-primary" type="submit" name="letter" value="">Show All</button>
+                </div>
+
+            </form>
+            }
+
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Profile Picture</th>
+                        <th></</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+
+                            <td colspan="4">No records found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+
+                        @foreach (var contact in Model)
+                        {
+
+                            <tr>
+                                <td><b>@contact.FirstName @contact.LastName</b></td>
+
+                                <td>
+                                    @if (contact.Image != string.Empty)
+                                    {
+                                        <img src="@Url.Content("~/uploads/" + contact.Image)" class="img-fluid rounded-circle" alt="Contact Image" width="50" height="50" />
+                                    }
+                                    else
+                                    {
+                                        <div class="col-sm-10">
+                                            <img src="@Url.Content("~/uploads/defaultimage.png")" class="img-fluid rounded-circle" alt="Profile Picture" width="50" height="50" />
+                                        </div>
+                                    }
+                                </td>
+                                        <td>
+                                            @if (contact.Favourites)
+                                            {
+                                                <span class="mr-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                                    </svg>
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <a class="btn" asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.ContactId" title="Edit">
+                                                    <img src="~/uploads/edit.jpg" alt="Edit" width="20" height="20" />
+                                                </a>
+
+                                                <a class="btn" asp-controller="Contact" asp-action="Delete" asp-route-id="@contact.ContactId" title="Delete">
+                                                    <img src="~/uploads/delete.jpg" alt="Delete" width="20" height="20" />
+                                                </a>
+                                            }
+                                            <a class="btn" asp-controller="Contact" asp-action="Details" asp-route-id="@contact.ContactId" title="Details">
+                                                <img src="~/uploads/details.jpg" alt="Details" width="20" height="20" />
+                                            </a>
+                            </tr>
+                        }
+
+
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="d-grid">
+            <a asp-action="ShowAllContactWithPagination" class="btn btn-secondary">Back to Homepage</a>
+        </div>
+    </form>
+
+</body>
+</html>
+<button class="btn"><a style="text-decoration:none" asp-action="Create">Add</a></button>
+@if (Model.Count > 0)
+{
+    <!-- Pagination -->
+    <div>
+        <!-- Page size dropdown -->
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" onchange="changePageSize(this)">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <!-- Add more options as needed -->
+        </select>
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                    <a class="page-link" href="/Contact/ShowAllContactWithPaginationFav?letter=@ViewBag.Letter&page=@i&pageSize=@ViewBag.PageSize">@i</a>
+                </li>
+
+            }
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+            var pageSizeDropdown = document.getElementById("pageSize");
+            // Set selected option based on current page size
+            for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+                if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                    pageSizeDropdown.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+        function changePageSize(select) {
+            var pageSize = select.value;
+            var currentPage = "@ViewBag.CurrentPage";
+            var letter = "@ViewBag.Letter";
+
+            window.location.href = "/Contact/ShowAllContactWithPaginationFav?letter=" + letter + "&page=" + currentPage + "&pageSize=" + pageSize;
+        }
+    </script>
+}
+
+
+@* <style>
+    /* Style for buttons */
+    .btn {
+        color: blue; /* Change font color */
+        background-color: white; /* Change background color */
+        border: 1px solid blue; /* Set border color */
+        padding: 4px 8px; /* Adjust padding */
+        font-size: 14px; /* Adjust font size */
+        border-radius: 3px; /* Adjust border radius */
+    }
+
+        /* Hover effect for buttons */
+        .btn:hover {
+            color: white; /* Change font color on hover */
+            background-color: blue; /* Change background color on hover */
+        }
+</style> *@

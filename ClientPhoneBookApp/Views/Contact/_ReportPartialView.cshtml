@@ -1,0 +1,157 @@
+﻿@using ClientPhoneBookApp.ViewModels
+<h3 class="text-center">Reports</h3>
+
+@{
+
+    int? country = ViewBag.Country;
+    int? state = ViewBag.State;
+
+    string? gender = ViewBag.Gender;
+    int? month = ViewBag.Month;
+
+    var countries = ViewBag.Countries as List<CountryViewModel>;
+    var states = ViewBag.States as List<StateViewModel>;
+
+    var months = new[]
+     {
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+     };
+}
+
+<div class="container" style="background-color: white;">
+
+    <div class="row">
+
+        <div class="col-lg-3 mt-3">
+            <div class="form-outline" style="width: 100%;">
+                <label class="control-label"><b>Country:</b></label>
+                <select id="countryDropdown" class="form-control" style="border-color:#7B57CB;">
+                    <option value=0>--Select Country--</option>
+                    @{
+
+                        if (countries != null)
+                        {
+                            for (int i = 0; i < countries.Count; i++)
+                            {
+                                <option value="@countries[i].CountryId" selected='@(country == countries[i].CountryId)'>@countries[i].CountryName</option>
+                            }
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+        <div class="col-lg-3 mt-3">
+            <div class="form-outline" style="width: 100%;">
+                <label class="control-label"><b>State:</b></label>
+                <select id="stateDropdown" class="form-control" style="border-color:#7B57CB;">
+                    <option value=0>--Select State--</option>
+                    @{
+
+                        if (states != null)
+                        {
+                            for (int i = 0; i < states.Count; i++)
+                            {
+                                <option value="@states[i].StateId" selected='@(state == states[i].StateId)'>@states[i].StateName</option>
+                            }
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+
+        <div class="col-lg-3 mt-3">
+            <div class="form-outline" style="width: 100%;">
+                <label class="control-label"><b>Gender:</b></label>
+                <select id="genderDropdown" name="type" class="form-control" style="border-color:#7B57CB;">
+                    <option value="">----- Select Gender -----</option>
+                    <option value="M" selected='@(gender == "M")'>Male</option>
+                    <option value="F" selected='@(gender == "F")'>Female</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="col-lg-3 mt-3">
+            <div class="form-outline" style="width: 100%;">
+                <label class="control-label"><b>Month:</b></label>
+                <select id="monthDropdown" name="type" class="form-control" style="border-color:#7B57CB;">
+                    <option value=0>--Select Month--</option>
+                    @{
+
+                        if (months != null)
+                        {
+                            for (int i = 0; i < months.Count(); i++)
+                            {
+                                <option value="@(i+1)" selected='@(month == (i+1))'>@months[i]</option>
+                            }
+                        }
+                    }
+                </select>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#countryDropdown').change(function () {
+            var countryId = $(this).val();
+
+            // window.location.href = "/Contact/GetContactsCountByCountrySP?country=" + countryId;
+            if (countryId != 0) {
+                window.location.href = "/Contact/GetAllContactsCountByCountrySP?country=" + countryId;
+            }
+            else {
+                window.location.href = "/Contact/GetAllContactsCountByCountrySP";
+
+            }
+        });
+
+        $('#genderDropdown').change(function () {
+            var gender = $(this).val();
+
+            if (gender != "") {
+                window.location.href = "/Contact/GetAllContactsCountByGenderSP?gender=" + gender;
+            }
+            else {
+                window.location.href = "/Contact/GetAllContactsCountByGenderSP";
+
+            }
+        });
+
+        $('#stateDropdown').change(function () {
+            var stateId = $(this).val();
+
+            if (stateId != 0) {
+                window.location.href = "/Contact/GetAllContactsByStatesSP?state=" + stateId;
+            }
+            else {
+                window.location.href = "/Contact/GetAllContactsByStatesSP";
+
+            }
+        });
+
+        $('#monthDropdown').change(function () {
+            var month = $(this).val();
+
+            if (month != 0) {
+                window.location.href = "/Contact/GetAllContactsByBirthdayMonthSP?month=" + month;
+            }
+            else {
+                window.location.href = "/Contact/GetAllContactsByBirthdayMonthSP";
+
+            }
+        });
+    });
+
+</script>

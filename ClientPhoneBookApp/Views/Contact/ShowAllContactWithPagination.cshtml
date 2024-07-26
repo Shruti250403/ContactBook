@@ -1,0 +1,295 @@
+﻿@using ClientPhoneBookApp.ViewModels
+
+
+
+@model List<ContactViewModel>
+@{
+    int count = 1;
+    string search = ViewBag.Search;
+    var distinctLetters = ViewBag.DistinctLetters;
+}
+@* <h2>Contacts</h2> *@
+<h2 class="colorful-heading">Contacts</h2>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form method="get" id="myForm">
+        <div>
+            <div class="btn-row">
+                @if (distinctLetters != null && distinctLetters.Count > 0)
+                {
+                    @foreach (var letter in distinctLetters)
+                    {
+                        string buttonClass = "";
+                        if (ViewBag.Letter != null && ViewBag.Letter.ToString() == letter.ToString())
+                        {
+                            buttonClass = "active";
+                        }
+
+                        <button class="btn btn-outline-primary @buttonClass" type="submit" name="letter" value="@letter">@letter</button>
+
+                    }
+                    <button class="btn btn-outline-primary" type="submit" name="letter" value="">Show All</button>
+                }
+                else
+                {
+                    <p>No records found</p>
+                }
+                
+                
+            </div>
+           @*  <div style="margin-top: 20px;">
+                <button class="btn btn-outline-primary" style="background-color: ghostwhite; border-color: black;">
+                    <a style="text-decoration: none; color: black;" asp-action="ShowAllContactWithPaginationFav">Favorites</a>
+                </button>
+            </div> *@
+            <div style="margin-top: 20px;">
+                <a class="btn btn-outline-primary fav-button" asp-action="ShowAllContactWithPaginationFav">
+                    <span class="fav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M8 .25l2.48 5.75 6.63.61-5.06 4.55 1.5 6.58-6.25-3.75-6.25 3.75 1.5-6.58L.89 6.61l6.63-.61L8 .25zm0 2.22L6.72 5.74a.75.75 0 0 0 .22.8l3.29 2.49-1 4.37a.75.75 0 0 0 1.14.8L8 12.67l-3.37 2.03a.75.75 0 0 0 1.14-.8l-1-4.37 3.29-2.49a.75.75 0 0 0 .22-.8L8 2.47v.003z" />
+                        </svg>
+                    </span>
+                    Favorites
+                </a>
+            </div>
+
+
+            <!-- Search Bar -->
+            <div style="margin-top: 20px;">
+                <div class="input-group">
+                    <input type="text" name="search" style="margin-right: 10px;" placeholder="Search..." value="@ViewBag.search">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                    <div style="margin-left: 10px;">
+                    <a href="/Contact/ShowAllContactWithPagination?letter=@ViewBag.Letter&pageSize=@ViewBag.PageSize" class="btn btn-secondary">Clear</a>
+                </div>
+
+
+                
+            
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th> Name
+                            <a asp-action="ShowAllContactWithPagination" asp-route-sortOrder="asc" asp-route-letter="@ViewBag.Letter" asp-route-pageSize="@ViewBag.PageSize" asp-route-search="@search">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                    <path d="M8.354 4.354a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14a.5.5 0 0 1-1 0V5.707L5.646 7.061a.5.5 0 1 1-.708-.708l3-3z" />
+                                </svg>
+                            </a>
+                            <a asp-action="ShowAllContactWithPagination" asp-route-sortOrder="desc" asp-route-letter="@ViewBag.Letter" asp-route-pageSize="@ViewBag.PageSize" asp-route-search="@search">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                    <path d="M8.354 11.354a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 9.293V2a.5.5 0 0 0-1 0v7.293L5.354 7.646a.5.5 0 1 0-.708.708l3 3z" />
+                                </svg>
+                            </a>
+                        </th>
+                        
+                        <th></th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="4">No records found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var contact in Model)
+                    {
+                        <tr>
+                            <td>
+                                    @if (contact.Image != string.Empty)
+                                    {
+                                        <img src="@Url.Content("~/uploads/" + contact.Image)" class="img-fluid rounded-circle" alt="Contact Image" width="50" height="50" />
+
+
+                                    }
+                                    else
+                                    {
+                                        <div class="col-sm-10">
+                                            <img src="@Url.Content("~/uploads/defaultimage.png")" class="img-fluid rounded-circle" alt="Profile Picture" width="50" height="50" />
+                                        </div>
+                                    }
+                            </td>
+                            <td><b>@contact.FirstName @contact.LastName</b></td>
+                           
+                            <td>
+                                @if (contact.Favourites)
+                                {
+                                    <span class="mr-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                        </svg>
+                                    </span>
+                                }
+                            </td>
+                            
+                            @* <td>@contact.Phone</td> *@
+                            
+                            <td>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a class="btn" asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.ContactId" title="Edit">
+                                        <img src="~/uploads/edit.jpg" alt="Edit" width="20" height="20" />
+                                    </a>
+
+                                    <a class="btn" asp-controller="Contact" asp-action="Delete" asp-route-id="@contact.ContactId" title="Delete">
+                                        <img src="~/uploads/delete.jpg" alt="Delete" width="20" height="20" />
+                                    </a>
+                                }
+                                <a class="btn" asp-controller="Contact" asp-action="Details" asp-route-id="@contact.ContactId" title="Details">
+                                    <img src="~/uploads/details.jpg" alt="Details" width="20" height="20" />
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </form>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-link" asp-controller="Contact" asp-action="Create" title="Add">
+            <img src="~/uploads/plus.jpg" alt="Add" width="20" height="20" class="add-icon" />
+        </a>
+
+    }
+
+    <!-- Pagination -->
+    <div>
+        <!-- Page size dropdown -->
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" onchange="changePageSize(this)">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+        </select>
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                    <a class="page-link" href="/Contact/ShowAllContactWithPagination?letter=@ViewBag.Letter&page=@i&pageSize=@ViewBag.PageSize&searchQuery=@ViewBag.SearchQuery&sortOrder=@ViewBag.SortOrder">@i</a>
+                </li>
+            }
+            
+        </ul>
+    </div>
+    <div>
+
+       
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+                var pageSizeDropdown = document.getElementById("pageSize");
+                for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+                    if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                        pageSizeDropdown.selectedIndex = i;
+                        break;
+                    }
+                }
+            });
+
+            // function changePageSize(select) {
+            //     var pageSize = select.value;
+            //     var currentPage = "@ViewBag.CurrentPage";
+            //     var letter = "@ViewBag.Letter";
+            //     var searchQuery = "@ViewBag.SearchQuery";
+            //     window.location.href = "/Contact/ShowAllContactWithPagination?letter=" + letter + "&search=" + search + "&page=" + currentPage + "&pageSize=" + pageSize + "&sortOrder=" + sortOrder;
+            // }
+
+            function changePageSize(select) {
+                var pageSize = select.value;
+                var currentPage = "@ViewBag.CurrentPage";
+                var letter = "@ViewBag.Letter";
+                var searchQuery = "@ViewBag.SearchQuery"; // Correct variable name
+                var sortOrder = "@ViewBag.SortOrder"; // Ensure sortOrder is defined correctly
+
+                window.location.href = "/Contact/ShowAllContactWithPagination?letter=" + letter + "&search=" + searchQuery + "&page=" + currentPage + "&pageSize=" + pageSize + "&sortOrder=" + sortOrder;
+            }
+
+            $(document).ready(function () {
+                $('.dropbtn').on('click', function (event) {
+                    event.stopPropagation();
+                    var dropdownContent = $(this).next('.dropdown-content');
+                    $('.dropdown-content').not(dropdownContent).hide(); // Hide other dropdowns
+                    dropdownContent.toggle(); // Toggle the current dropdown
+                });
+
+                $(document).on('click', function () {
+                    $('.dropdown-content').hide();
+                });
+            });
+
+            function sortContacts(order) {
+                var currentUrl = window.location.href;
+                var newUrl;
+                // Check if the current URL already contains a sortOrder parameter
+                if (currentUrl.includes("sortOrder")) {
+                    // If sortOrder parameter exists, replace its value with the new order
+                    newUrl = currentUrl.replace(/sortOrder=[^\&]+/, "sortOrder=" + order);
+                } else {
+                    // If sortOrder parameter does not exist, add it to the URL
+                    newUrl = currentUrl + (currentUrl.includes("?") ? "&" : "?") + "sortOrder=" + order;
+                }
+                // Redirect to the new URL
+                window.location.href = newUrl;
+            }
+    </script>
+    </body>
+    </html>
+    <style>
+    /* Custom styling for the favorites button */
+    .fav-button {
+        background-color: ghostwhite;
+        border-color: black;
+        color: black;
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 12px;
+        position: relative;
+        overflow: hidden;
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: 4px;
+    }
+
+        .fav-button:hover {
+            background-color: green;
+        }
+
+        .fav-button .fav-icon {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+    .fav-icon svg {
+        vertical-align: middle;
+    }
+
+        .fav-icon svg path {
+            transition: fill 0.3s ease;
+        }
+
+    .fav-button:hover .fav-icon svg path {
+        fill: white; /* Change the fill color of the heart icon on hover */
+    }
+
+
+    </style>
+

@@ -1,0 +1,23 @@
+﻿@using ClientPhoneBookApp.ViewModels
+
+@model List<CountViewModel>
+
+@{
+
+    int totalCount = ViewBag.TotalCount;
+    int country = ViewBag.Country;
+
+    var countries = ViewBag.Countries as List<CountryViewModel>;
+    var states = ViewBag.States as List<StateViewModel>;
+
+}
+
+
+
+<div class="container" style="background-color: white;">
+
+    <partial name="_ReportPartialView" />
+
+    <h4>Total Contacts Count: @totalCount</h4>
+
+</div>

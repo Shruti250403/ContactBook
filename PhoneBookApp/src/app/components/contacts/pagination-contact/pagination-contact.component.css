@@ -1,0 +1,111 @@
+.custom-select-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .custom-select:focus {
+    outline: none;
+  }
+  .favourites-link-container {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    padding: 4px 8px; /* Adjusted padding */
+    border: 0.5px solid black; /* Adjusted border */
+    border-radius: 5px; /* Adjusted border radius */
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .favourites-link-container:hover {
+    background-color: rgb(242, 72, 72);
+    color: white;
+  }
+  
+  .favourites-link-container i {
+    margin-right: 1px; /* Adjusted margin */
+    font-size: 5px; /* Adjusted font size */
+  }
+  
+  .favourites-link-text {
+    font-family: Arial, sans-serif;
+    font-size: 12px; /* Adjusted font size */
+    font-weight: bold;
+  }
+  
+  
+  .btn.active {
+    background-color: #007bff; /* Blue color */
+    color: #fff; /* White text color */
+  }
+  
+  .custom-select option {
+    background-color: #fff;
+    color: #495057;
+  }
+  
+  /* Arrow icon */
+  .custom-select::after {
+    content: '\25BC'; /* Unicode character for down arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .arrowup,
+.arrowdown {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.arrowup {
+    margin-bottom: 17px; 
+}
+
+.arrowdown {
+  margin-left: -10px;
+    margin-top: 0px; 
+}
+.favourites-link {
+  font-family: Arial, sans-serif;
+}
+
+.favourites-link a {
+  color: #333;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.favourites-link a:hover {
+  color: #0066cc; /* Change color on hover */
+}
+
+.favourites-link a i {
+  margin-right: 5px; /* Add some space between icon and text */
+}
+.long-search-bar {
+  width: 100%;
+}
+.clear-search-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.clear-search-btn:hover {
+  background-color: #f8f9fa; /* Lighten the background on hover */
+}

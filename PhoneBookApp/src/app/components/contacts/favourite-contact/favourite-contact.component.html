@@ -1,0 +1,96 @@
+<h1>
+    <span style="color: red;">F</span>
+    <span style="color: blue;">a</span>
+    <span style="color: green;">v</span>
+    <span style="color: orange;">o</span>
+    <span style="color: purple;">u</span>
+    <span style="color: teal;">r</span>
+    <span style="color: pink;">i</span>
+    <span style="color: brown;">t</span>
+    <span style="color: black;">e</span>
+    <span style="color: gray;"> </span>
+    <span style="color: red;">C</span>
+    <span style="color: blue;">o</span>
+    <span style="color: green;">n</span>
+    <span style="color: orange;">t</span>
+    <span style="color: purple;">a</span>
+    <span style="color: teal;">c</span>
+    <span style="color: pink;">t</span>
+    <span style="color: brown;">s</span>
+  </h1>
+  
+
+<div *ngIf="loading">
+    <img src="assets/loaderImage.gif" alt="loading..." />
+</div>
+
+<div *ngIf="!loading" class="d-flex justify-content-between align-items-center mb-3">
+    <div class="btn-group">
+        <ng-container *ngIf="contacts && contacts.length > 0">
+            <button class="btn btn-outline-primary mr-2"*ngFor="let letter of uniqueFirstLetters; let i = index"
+            (click)="filterByLetter(letter)"[style.color]="colors[i]">       
+            {{ letter }}
+        </button>
+        </ng-container>
+       
+        <a class="btn btn-outline-primary"style="color: red;" *ngIf="contacts !== null"(click)="filterByLetter(null)">Show All</a>
+    </div>
+    </div>
+    <div class="table-responsive">
+    <table class="table table-stripped" *ngIf="!loading">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="totalItems != 0 && contacts && contacts.length > 0; else noContacts">
+            <tr *ngFor="let contact of contacts">
+                <td *ngIf="contact.image!='girl.jpg'">
+                    <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+                      [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+                  </td>
+                  <td *ngIf="contact.image=='girl.jpg'">
+                    <img src="assets/girl.jpg" alt="image" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+                
+                <td>
+                    <a class="btn btn-outline-warning" [routerLink]="['/detailcontact', contact.contactId]" routerLinkActive="router-link-active" title="Details">
+                        <i class="fas fa-info-circle"></i>
+                      </a>
+          
+                      <a *ngIf="isAuthenticated" class="btn btn-outline-info" [routerLink]="['/editcontact', contact.contactId]" routerLinkActive="router-link-active" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                    <!-- <button class="btn btn-outline-danger m-1" (click)="deleteContact(contact.contactId)">Delete</button> -->
+                </td>
+            </tr>
+        </tbody>
+        <ng-template #noContacts>
+            <tr colspan="5">
+                <td>No contacts Found!</td>
+            </tr>
+        </ng-template>
+    </table>
+
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+        <option [ngValue]="2">2</option>
+        <option [ngValue]="4">4</option>
+        <option [ngValue]="6">6</option>
+    </select>
+
+    <!-- Pagination controls -->
+    <ul class="pagination">
+        <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item"
+            [class.active]="pageNumber === index + 1">
+            <a class="page-link" (click)="changePage(index + 1)">{{ index + 1 }}</a>
+        </li>
+    </ul>
+
+</div>
+<a class="btn btn-outline-info" [routerLink]="['/addcontact']" routerLinkActive="router-link-active">Add</a>
+
